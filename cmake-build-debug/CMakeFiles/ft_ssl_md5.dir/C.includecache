@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/omakovsk/Documents/ft_ssl_md5/libft/libft.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+stdarg.h
+-
+
+/Users/omakovsk/Documents/ft_ssl_md5/src/ft_ssl_md5.h
+
+/Users/omakovsk/Documents/ft_ssl_md5/src/main.c
+../libft/libft.h
+/Users/omakovsk/Documents/ft_ssl_md5/libft/libft.h
+ft_ssl_md5.h
+/Users/omakovsk/Documents/ft_ssl_md5/src/ft_ssl_md5.h
+stdio.h
+-
+
