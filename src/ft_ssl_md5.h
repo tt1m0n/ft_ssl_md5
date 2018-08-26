@@ -21,9 +21,23 @@
 #define EP0(x) (ROTATE_RIGHT(x, 2) ^ ROTATE_RIGHT(x, 13) ^ ROTATE_RIGHT(x, 22))
 #define EP1(x) (ROTATE_RIGHT(x, 6) ^ ROTATE_RIGHT(x, 11) ^ ROTATE_RIGHT(x, 25))
 #define SIG0(x) (ROTATE_RIGHT(x, 7) ^ ROTATE_RIGHT(x, 18) ^ SHIFT_RIGHT(x, 3))
-#define SIG1(x) (ROTATE_RIGHT(x, 17) ^ ROTATE_RIGHT(x, 19) ^ SHIFT_RIGHT(x, 3))
+#define SIG1(x) (ROTATE_RIGHT(x, 17) ^ ROTATE_RIGHT(x, 19) ^ SHIFT_RIGHT(x, 10))
 
-const unsigned int sha256_word[64] =
+#define ZERO_BIT 			0x00
+#define START_PADDING 		0x80
+#define NUM_OF_START_WORDS 	8
+#define MAX_SIZE_OF_WORD 	64
+#define SYMBOL_SIZE		    8
+#define MAX_SHIFT           24
+#define INT_STEP            4
+#define START_VALUE         0
+#define MESSAGE_BYTE_SIZE   56
+
+typedef unsigned char UCHAR;
+typedef unsigned int  UINT;
+typedef unsigned long ULONG;
+
+const UINT sha256_word[MAX_SIZE_OF_WORD] =
 {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -45,10 +59,10 @@ const unsigned int sha256_word[64] =
 
 typedef struct
 {
-	unsigned char data[64];
-	int datalen;
-	unsigned long bitlen;
-	int start_word[8];
+	UCHAR	data[MAX_SIZE_OF_WORD];
+	UINT	datalen;
+	ULONG	bitlen;
+	UINT	start_word[NUM_OF_START_WORDS];
 } sha256_info;
 
 #endif
