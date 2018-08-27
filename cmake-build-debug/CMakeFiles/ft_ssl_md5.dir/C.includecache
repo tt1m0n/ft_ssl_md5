@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/omakovsk/Documents/ft_ssl_md5/libft/libft.h
+/Users/omakovsk/ft_ssl_md5/libft/libft.h
 string.h
 -
 stdlib.h
@@ -16,13 +16,21 @@ unistd.h
 stdarg.h
 -
 
-/Users/omakovsk/Documents/ft_ssl_md5/src/ft_ssl_md5.h
+/Users/omakovsk/ft_ssl_md5/src/ft_global.h
 
-/Users/omakovsk/Documents/ft_ssl_md5/src/main.c
+/Users/omakovsk/ft_ssl_md5/src/ft_md5.h
+ft_global.h
+/Users/omakovsk/ft_ssl_md5/src/ft_global.h
+
+/Users/omakovsk/ft_ssl_md5/src/ft_sha256.h
 ../libft/libft.h
-/Users/omakovsk/Documents/ft_ssl_md5/libft/libft.h
-ft_ssl_md5.h
-/Users/omakovsk/Documents/ft_ssl_md5/src/ft_ssl_md5.h
-stdio.h
--
+/Users/omakovsk/ft_ssl_md5/libft/libft.h
+ft_global.h
+/Users/omakovsk/ft_ssl_md5/src/ft_global.h
+
+/Users/omakovsk/ft_ssl_md5/src/main.c
+ft_md5.h
+/Users/omakovsk/ft_ssl_md5/src/ft_md5.h
+ft_sha256.h
+/Users/omakovsk/ft_ssl_md5/src/ft_sha256.h
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_md5.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omakovsk <omakovsk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_md5.h"
-#include "ft_sha256.h"
+# ifndef FT_MD5_H
+# define FT_MD5_H
 
-int	main()
-{
-    unsigned char abc[] = {"abc\n"};
-    unsigned char buf[32];
-    unsigned char buf1[16];
-    sha256_info sha = {};
-    MD5_CTX md5 = {};
+#include "ft_global.h"
 
-    MD5_Init(&md5);
-    MD5_Update(&md5,(void*)abc, sizeof(abc) - 1);
-    MD5_Final(buf1, &md5);
+typedef struct {
+    UINT lo, hi;
+    UINT a, b, c, d;
+    unsigned char buffer[64];
+    UINT block[16];
+} MD5_CTX;
 
-    sha256_init_start_words(&sha.start_word);
-    sha256_update_words(&sha, abc, sizeof(abc) - 1);
-    sha256_final(&sha, buf);
+void MD5_Init(MD5_CTX *ctx);
+void MD5_Update(MD5_CTX *ctx, const void *data, unsigned long size);
+void MD5_Final(UCHAR *result, MD5_CTX *ctx);
 
-    for (int i = START_VALUE; i < 32; i++)
-    {
-        ft_printf("%2x ", buf[i]);
-    }
-    ft_printf ("\n");
-
-    for (int i = START_VALUE; i < 16; i++)
-    {
-        ft_printf("%2x", buf1[i]);
-    }
-
-    ft_printf ("\n");
-    return (0);
-}
+#endif

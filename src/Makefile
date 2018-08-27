@@ -12,7 +12,7 @@
 
 FLAGS = -Wall -Werror -Wextra -c
 
-SRC = main.c
+SRC = main.c ft_sha256.c ft_md5.c ft_global.c
 
 OBJ	= $(SRC:.c=.o)
 
