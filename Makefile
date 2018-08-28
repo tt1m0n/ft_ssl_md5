@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = a.out
+NAME = ft_ssl
 OBJ =  objects/*.o
 LIBNAME = objects/libft.a
 FLAGS = -Wall -Werror -Wextra

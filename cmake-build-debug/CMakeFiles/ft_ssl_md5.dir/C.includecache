@@ -33,4 +33,6 @@ ft_md5.h
 /Users/omakovsk/ft_ssl_md5/src/ft_md5.h
 ft_sha256.h
 /Users/omakovsk/ft_ssl_md5/src/ft_sha256.h
+ft_global.h
+/Users/omakovsk/ft_ssl_md5/src/ft_global.h
 
