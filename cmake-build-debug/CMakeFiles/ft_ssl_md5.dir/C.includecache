@@ -17,6 +17,8 @@ stdarg.h
 -
 
 /Users/omakovsk/ft_ssl_md5/src/ft_global.h
+fcntl.h
+-
 
 /Users/omakovsk/ft_ssl_md5/src/ft_md5.h
 ft_global.h

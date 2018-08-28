@@ -18,6 +18,7 @@
 #define USAGE_STRING "usage: ft_ssl command [command opts] [command args]\n"
 #define STDIN ""
 #define BUFFER_SIZE 512
+#define UNKNOWN_FLAG 2
 
 typedef unsigned int UINT;
 typedef unsigned char UCHAR;
@@ -28,6 +29,20 @@ typedef enum
     md5 = 1,
     sha256
 } hash_type;
+
+typedef enum
+{
+    no_file = 0,
+    no_flag,
+    error_command
+} error_type;
+
+typedef struct
+{
+    hash_type   hash;
+    int         q_flag;
+    int         r_flag;
+} hash_info;
 
 extern const UINT sha256_word[64];
 
