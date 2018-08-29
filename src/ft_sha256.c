@@ -109,6 +109,21 @@ void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_
 	}
 }
 
+void little_endian_to_big(sha256_info *sha, unsigned char* hash)
+{
+    for (i = START_VALUE; i < 4; ++i)
+    {
+        hash[i] = (UCHAR)(sha->start_word[0] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 1] = (UCHAR)(sha->start_word[1] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 2] = (UCHAR)(sha->start_word[2] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 3] = (UCHAR)(sha->start_word[3] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 4] = (UCHAR)(sha->start_word[4] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 5] = (UCHAR)(sha->start_word[5] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 6] = (UCHAR)(sha->start_word[6] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+    }
+}
+
 void sha256_final(sha256_info *sha, unsigned char* hash)
 {
 	UINT i;
@@ -142,18 +157,4 @@ void sha256_final(sha256_info *sha, unsigned char* hash)
 	sha->data[57] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 6);
 	sha->data[56] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 7);
 	sha256_transform_words(sha);
-
-	// Since this implementation uses little endian byte ordering and SHA uses big endian,
-	// reverse all the bytes when copying the final state to the output hash.
-	for (i = START_VALUE; i < 4; ++i)
-	{
-		hash[i] = (UCHAR)(sha->start_word[0] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 1] = (UCHAR)(sha->start_word[1] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 2] = (UCHAR)(sha->start_word[2] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 3] = (UCHAR)(sha->start_word[3] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 4] = (UCHAR)(sha->start_word[4] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 5] = (UCHAR)(sha->start_word[5] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 6] = (UCHAR)(sha->start_word[6] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-		hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-	}
 }

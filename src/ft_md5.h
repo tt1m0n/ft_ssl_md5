@@ -15,6 +15,8 @@
 
 #include "ft_global.h"
 
+#define MD5_OUTPUT_SIZE 16
+
 typedef struct {
     UINT lo, hi;
     UINT a, b, c, d;

@@ -14,33 +14,56 @@
 #include "ft_sha256.h"
 #include "ft_global.h"
 
-void sha256(char* need_hash, int flags, char* filename)
+void common_hash_parse(int* flags, char* need_hash, char* filename)
 {
-    if (need_hash || flags || filename)
-        ;
+    if(*flags == (S | R))
+        ft_printf(" \"%s\"", need_hash);
+    if(*flags == R)
+        ft_printf(" %s", filename);
+    ft_printf("\n");
+    if(*flags > (Q | R))
+        *flags &= (Q | R);
 }
 
-void md5(char* need_hash, int flags, char* filename)
+void sha256(char* need_hash, int* flags, char* filename)
 {
-    unsigned char buf[16];
+    UCHAR buf[SHA256_OUTPUT_SIZE];
+    sha256_info sha = {};
+    UINT i;
+
+    i = START_VALUE;
+    sha256_init_start_words(&sha.start_word);
+    sha256_update_words(&sha, (UCHAR*)need_hash, ft_strlen(need_hash));
+    sha256_final(&sha, buf);
+
+    if(*flags == 0 && filename[0] != 0)
+        ft_printf("SHA256 (%s) = ", filename);
+    if(*flags == S)
+        ft_printf("SHA256 (\"%s\") = ", need_hash);
+    while(i < SHA256_OUTPUT_SIZE)
+        ft_printf("%02x", buf[i++]);
+    common_hash_parse(flags, need_hash, filename);
+}
+
+void md5(char* need_hash, int* flags, char* filename)
+{
+    UCHAR buf[MD5_OUTPUT_SIZE];
     MD5_CTX md5 = {};
-    int i;
+    UINT i;
 
     i = START_VALUE;
     MD5_Init(&md5);
     MD5_Update(&md5,(void*)need_hash, ft_strlen(need_hash));
     MD5_Final(buf, &md5);
 
-    if(flags == 0 && filename[0] != 0)
+    if(*flags == 0 && filename[0] != 0)
         ft_printf("MD5 (%s) = ", filename);
-    if(flags == S)
+    if(*flags == S)
         ft_printf("MD5 (\"%s\") = ", need_hash);
-    while(i < 16) {
+    while(i < MD5_OUTPUT_SIZE)
         ft_printf("%02x", buf[i++]);
-    }
-    ft_printf("\n");
-    if(flags >> 2)
-        flags &= (Q | R);
+    common_hash_parse(flags, need_hash, filename);
+
 }
 
 hash_ptr find_hash_type(char* hash)
@@ -108,7 +131,8 @@ int read_hash_info(hash_info* hash_info, char* info, int file)
     int fd;
     char* need_to_hash;
 
-    fd = 0;
+    fd = START_VALUE;
+    need_to_hash = NULL;
     if (info[0] != 0 && file)
         fd = open(info, O_RDONLY);
     if (fd == - 1)
@@ -119,25 +143,36 @@ int read_hash_info(hash_info* hash_info, char* info, int file)
         need_to_hash = take_text_from_file(fd);
     else
         need_to_hash = info;
-    hash_info->hash_ptr(need_to_hash, hash_info->flags, info);
+    if (hash_info->flags >= P)
+    {
+        ft_printf("%s", need_to_hash);
+        hash_info->flags &= (Q | R | S);
+    }
+    hash_info->hash_ptr(need_to_hash, &hash_info->flags, info);
     return (1);
+}
+
+int parse_helpers_for_s(hash_info* hash_info, char*** argv)
+{
+    if(*(*argv + 1) == NULL)
+        return UNKNOWN_FLAG;
+    else
+    {
+        (*argv)++;
+        hash_info->flags |= S;
+        return (read_hash_info(hash_info, **argv, 0));
+    }
 }
 
 int parse_flags(hash_info* hash_info, char*** argv)
 {
     if(ft_strcmp(**argv, "-s") == 0)
-    {
-        if(*(*argv + 1) == NULL)
-            read_hash_info(hash_info, STDIN, 1);
-        else
-        {
-            (*argv)++;
-            hash_info->flags |= S;
-            return (read_hash_info(hash_info, **argv, 0));
-        }
-    }
+        return parse_helpers_for_s(hash_info, argv);
     else if(ft_strcmp(**argv, "-p") == 0)
+    {
+        hash_info->flags |= P;
         return (read_hash_info(hash_info, STDIN, 1));
+    }
     else if (ft_strcmp(**argv, "-q") == 0)
     {
         if(*(*argv + 1) == NULL)
@@ -168,9 +203,7 @@ int	main(int argc, char** argv)
             return (print_error(0, error_command, *argv));
         argv = argv + 2;
         if (*argv == NULL)
-        {
             return (read_hash_info(&hash_info, STDIN, 1));
-        }
         while (*argv && (*argv)[0] == '-')
         {
             if (parse_flags(&hash_info, &argv) == UNKNOWN_FLAG)
@@ -183,34 +216,5 @@ int	main(int argc, char** argv)
             argv++;
         }
     }
-
-
-//    unsigned char abc[] = {"abc\n"};
-//    unsigned char buf[32];
-//    unsigned char buf1[16];
-//    sha256_info sha = {};
-//    MD5_CTX md5 = {};
-//
-//    MD5_Init(&md5);
-//    MD5_Update(&md5,(void*)abc, sizeof(abc) - 1);
-//    MD5_Final(buf1, &md5);
-//
-//    sha256_init_start_words(&sha.start_word);
-//    sha256_update_words(&sha, abc, sizeof(abc) - 1);
-//    sha256_final(&sha, buf);
-//
-//    for (int i = START_VALUE; i < 32; i++)
-//    {
-//        ft_printf("%2x ", buf[i]);
-//    }
-//    ft_printf ("\n");
-//
-//    for (int i = START_VALUE; i < 16; i++)
-//    {
-//        ft_printf("%2x", buf1[i]);
-//    }
-
- //   ft_printf ("\n");
     return (0);
 }
-

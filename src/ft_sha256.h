@@ -16,6 +16,8 @@
 #include "../libft/libft.h"
 #include "ft_global.h"
 
+#define SHA256_OUTPUT_SIZE 32
+
 #define ROTATE_RIGHT(x, n) (((x) >> (n)) | ((x) << (32 - (n))))
 #define SHIFT_RIGHT(x, n) ((x) >> (n))
 

@@ -30,9 +30,10 @@ typedef unsigned long ULONG;
 //    sha256
 //} hash_type;
 
-#define Q 0x01
-#define R 0x10
-#define S 0x100
+#define Q 1
+#define R 2
+#define S 4
+#define P 8
 
 typedef enum
 {
@@ -42,7 +43,7 @@ typedef enum
     try_open_dir
 } error_type;
 
-typedef void (*hash_ptr)(char*, int flags, char* filename);
+typedef void (*hash_ptr)(char*, int* flags, char* filename);
 
 typedef struct
 {
