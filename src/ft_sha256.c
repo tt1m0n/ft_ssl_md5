@@ -12,6 +12,50 @@ void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS])
 	(*info)[7] = 0x5be0cd19;
 }
 
+void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len)
+{
+    UINT i;
+
+    i = START_VALUE;
+    while((size_t)i < len)
+    {
+        sha_info->data[sha_info->datalen] = data[i];
+        sha_info->datalen++;
+        if(sha_info->datalen == MAX_SIZE_OF_WORD)
+        {
+            sha256_transform_words(sha_info);
+            sha_info->bitlen += MAX_SIZE_OF_WORD * SYMBOL_SIZE;
+            sha_info->datalen = START_VALUE;
+        }
+        i++;
+    }
+}
+
+void sha256_transform_words(sha256_info* sha)
+{
+    UINT i;
+    UINT tmp[NUM_OF_START_WORDS];
+    UINT new_data[MAX_SIZE_OF_WORD];
+
+    sha256_data_transformation(sha, &new_data);
+
+    i = START_VALUE;
+    while(i < NUM_OF_START_WORDS)
+    {
+        tmp[i] = sha->start_word[i];
+        i++;
+    }
+
+    sha256_compression_cycle(&tmp, &new_data);
+
+    i = START_VALUE;
+    while (i < NUM_OF_START_WORDS)
+    {
+        sha->start_word[i] += tmp[i];
+        i++;
+    }
+}
+
 void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD])
 {
 	UCHAR* data;
@@ -65,96 +109,67 @@ void sha256_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
     }
 }
 
-void sha256_transform_words(sha256_info* sha)
+void sha256_final(sha256_info *sha, unsigned char* hash)
 {
     UINT i;
-	UINT tmp[NUM_OF_START_WORDS];
-	UINT new_data[MAX_SIZE_OF_WORD];
 
-	sha256_data_transformation(sha, &new_data);
-
-    i = START_VALUE;
-	while(i < NUM_OF_START_WORDS)
-	{
-		tmp[i] = sha->start_word[i];
-		i++;
-	}
-
-	sha256_compression_cycle(&tmp, &new_data);
-
-	i = START_VALUE;
-	while (i < NUM_OF_START_WORDS)
-	{
-		sha->start_word[i] += tmp[i];
-		i++;
-	}
+    i = sha->datalen;
+    if (sha->datalen < MESSAGE_BYTE_SIZE)
+    {
+        sha->data[i++] = START_PADDING;
+        while (i < MESSAGE_BYTE_SIZE)
+            sha->data[i++] = ZERO_BIT;
+    }
+    else
+    {
+        sha->data[i++] = START_PADDING;
+        while (i < MAX_SIZE_OF_WORD)
+            sha->data[i++] = ZERO_BIT;
+        sha256_transform_words(sha);
+        ft_memset(sha->data, ZERO_BIT, MESSAGE_BYTE_SIZE);
+    }
+    append_length_to_padding(sha);
+    sha256_transform_words(sha);
+    little_endian_to_big(sha, hash);
 }
 
-void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len)
+void append_length_to_padding(sha256_info* sha)
 {
-	UINT i;
-
-	i = START_VALUE;
-	while((size_t)i < len)
-	{
-		sha_info->data[sha_info->datalen] = data[i];
-		sha_info->datalen++;
-		if(sha_info->datalen == MAX_SIZE_OF_WORD)
-		{
-			sha256_transform_words(sha_info);
-			sha_info->bitlen += MAX_SIZE_OF_WORD * SYMBOL_SIZE;
-			sha_info->datalen = START_VALUE;
-		}
-		i++;
-	}
+    sha->bitlen += sha->datalen * SYMBOL_SIZE;
+    sha->data[63] = (UCHAR)sha->bitlen;
+    sha->data[62] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 1);
+    sha->data[61] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 2);
+    sha->data[60] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 3);
+    sha->data[59] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 4);
+    sha->data[58] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 5);
+    sha->data[57] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 6);
+    sha->data[56] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 7);
 }
+
 
 void little_endian_to_big(sha256_info *sha, unsigned char* hash)
 {
-    for (i = START_VALUE; i < 4; ++i)
+    UINT i;
+
+    i = START_VALUE;
+    while (i < 4)
     {
         hash[i] = (UCHAR)(sha->start_word[0] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 1] = (UCHAR)(sha->start_word[1] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 2] = (UCHAR)(sha->start_word[2] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 3] = (UCHAR)(sha->start_word[3] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 4] = (UCHAR)(sha->start_word[4] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 5] = (UCHAR)(sha->start_word[5] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 6] = (UCHAR)(sha->start_word[6] >> (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >> (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 1] = (UCHAR)(sha->start_word[1] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 2] = (UCHAR)(sha->start_word[2] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 3] = (UCHAR)(sha->start_word[3] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 4] = (UCHAR)(sha->start_word[4] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 5] = (UCHAR)(sha->start_word[5] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 6] = (UCHAR)(sha->start_word[6] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >>
+                            (MAX_SHIFT - i * SYMBOL_SIZE));
+        i++;
     }
 }
 
-void sha256_final(sha256_info *sha, unsigned char* hash)
-{
-	UINT i;
-
-	i = sha->datalen;
-
-	// Pad whatever data is left in the buffer.
-	if (sha->datalen < MESSAGE_BYTE_SIZE)
-	{
-		sha->data[i++] = START_PADDING;
-		while (i < MESSAGE_BYTE_SIZE)
-			sha->data[i++] = ZERO_BIT;
-	}
-	else
-	{
-		sha->data[i++] = START_PADDING;
-		while (i < MAX_SIZE_OF_WORD)
-			sha->data[i++] = ZERO_BIT;
-		sha256_transform_words(sha);
-		ft_memset(sha->data, ZERO_BIT, MESSAGE_BYTE_SIZE);
-	}
-
-	// Append to the padding the total message's length in bits and transform.
-	sha->bitlen += sha->datalen * SYMBOL_SIZE;
-	sha->data[63] = (UCHAR)sha->bitlen;
-	sha->data[62] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 1);
-	sha->data[61] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 2);
-	sha->data[60] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 3);
-	sha->data[59] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 4);
-	sha->data[58] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 5);
-	sha->data[57] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 6);
-	sha->data[56] = (UCHAR)(sha->bitlen >> SYMBOL_SIZE * 7);
-	sha256_transform_words(sha);
-}

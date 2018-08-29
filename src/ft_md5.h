@@ -17,6 +17,36 @@
 
 #define MD5_OUTPUT_SIZE 16
 
+/*
+ * The basic MD5 functions.
+ *
+ * F and G are optimized compared to their RFC 1321 definitions for
+ * architectures that lack an AND-NOT instruction, just like in Colin Plumb's
+ * implementation.
+ */
+#define F(x, y, z) ((z) ^ ((x) & ((y) ^ (z))))
+#define G(x, y, z) ((y) ^ ((z) & ((x) ^ (y))))
+#define H(x, y, z) (((x) ^ (y)) ^ (z))
+#define H2(x, y, z)	((x) ^ ((y) ^ (z)))
+#define I(x, y, z)	((y) ^ ((x) | ~(z)))
+
+/*
+ * The MD5 transformation for all four rounds.
+ */
+#define STEP(f, a, b, c, d, x, t, s) \
+	(a) += f((b), (c), (d)) + (x) + (t); \
+	(a) = (((a) << (s)) | (((a) & 0xffffffff) >> (32 - (s)))); \
+	(a) += (b);
+
+#define SET(n) \
+	(ctx->block[(n)] = \
+	(UINT)ptr[(n) * 4] | \
+	((UINT)ptr[(n) * 4 + 1] << 8) | \
+	((UINT)ptr[(n) * 4 + 2] << 16) | \
+	((UINT)ptr[(n) * 4 + 3] << 24))
+#define GET(n) \
+	(ctx->block[(n)])
+
 typedef struct {
     UINT lo, hi;
     UINT a, b, c, d;

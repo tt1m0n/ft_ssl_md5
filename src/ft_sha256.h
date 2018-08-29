@@ -46,12 +46,19 @@ typedef struct
 	UINT	start_word[NUM_OF_START_WORDS];
 } sha256_info;
 
+// init start words
+void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS]);
+
+// update words
+void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len);
+void sha256_transform_words(sha256_info* sha);
+void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD]);
 void sha256_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
 							  UINT (*new_data)[MAX_SIZE_OF_WORD]);
-void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS]);
-void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD]);
-void sha256_transform_words(sha256_info* sha);
-void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len);
+
+// final
 void sha256_final(sha256_info *sha, unsigned char* hash);
+void append_length_to_padding(sha256_info* sha);
+void little_endian_to_big(sha256_info *sha, unsigned char* hash);
 
 #endif

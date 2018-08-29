@@ -24,12 +24,6 @@ typedef unsigned int UINT;
 typedef unsigned char UCHAR;
 typedef unsigned long ULONG;
 
-//typedef enum
-//{
-//    md5 = 1,
-//    sha256
-//} hash_type;
-
 #define Q 1
 #define R 2
 #define S 4
