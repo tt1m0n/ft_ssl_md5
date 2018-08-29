@@ -24,24 +24,30 @@ typedef unsigned int UINT;
 typedef unsigned char UCHAR;
 typedef unsigned long ULONG;
 
-typedef enum
-{
-    md5 = 1,
-    sha256
-} hash_type;
+//typedef enum
+//{
+//    md5 = 1,
+//    sha256
+//} hash_type;
+
+#define Q 0x01
+#define R 0x10
+#define S 0x100
 
 typedef enum
 {
     no_file = 0,
     no_flag,
-    error_command
+    error_command,
+    try_open_dir
 } error_type;
+
+typedef void (*hash_ptr)(char*, int flags, char* filename);
 
 typedef struct
 {
-    hash_type   hash;
-    int         q_flag;
-    int         r_flag;
+    hash_ptr    hash_ptr;
+    int         flags;
 } hash_info;
 
 extern const UINT sha256_word[64];
