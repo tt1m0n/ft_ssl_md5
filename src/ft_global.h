@@ -15,10 +15,15 @@
 
 #include <fcntl.h>
 
+#define MD5_OUTPUT_SIZE 16
+#define SHA224_OUTPUT_SIZE 28
+#define SHA256_OUTPUT_SIZE 32
+
 #define USAGE_STRING "usage: ft_ssl command [command opts] [command args]\n"
 #define STDIN ""
 #define BUFFER_SIZE 512
 #define UNKNOWN_FLAG 2
+#define START_VALUE  0
 
 typedef unsigned int UINT;
 typedef unsigned char UCHAR;
@@ -36,6 +41,12 @@ typedef enum
     error_command,
     try_open_dir
 } error_type;
+
+typedef enum
+{
+    sha_224 = 0,
+    sha_256
+} sha_type;
 
 typedef void (*hash_ptr)(char*, int* flags, char* filename);
 

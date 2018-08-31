@@ -16,8 +16,6 @@
 #include "../libft/libft.h"
 #include "ft_global.h"
 
-#define SHA256_OUTPUT_SIZE 32
-
 #define ROTATE_RIGHT(x, n) (((x) >> (n)) | ((x) << (32 - (n))))
 #define SHIFT_RIGHT(x, n) ((x) >> (n))
 
@@ -35,7 +33,6 @@
 #define SYMBOL_SIZE		    8
 #define MAX_SHIFT           24
 #define INT_STEP            4
-#define START_VALUE         0
 #define MESSAGE_BYTE_SIZE   56
 
 typedef struct
@@ -44,21 +41,22 @@ typedef struct
 	UINT	datalen;
 	ULONG	bitlen;
 	UINT	start_word[NUM_OF_START_WORDS];
-} sha256_info;
+} sha_info;
 
 // init start words
 void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS]);
+void sha224_init_start_words(UINT (*info)[NUM_OF_START_WORDS]);
 
 // update words
-void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len);
-void sha256_transform_words(sha256_info* sha);
-void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD]);
-void sha256_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
-							  UINT (*new_data)[MAX_SIZE_OF_WORD]);
+void sha_update_words(sha_info *sha_info, const unsigned char *data, size_t len);
+void sha_transform_words(sha_info *sha);
+void sha_data_transformation(sha_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD]);
+void sha_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
+						   UINT (*new_data)[MAX_SIZE_OF_WORD]);
 
 // final
-void sha256_final(sha256_info *sha, unsigned char* hash);
-void append_length_to_padding(sha256_info* sha);
-void little_endian_to_big(sha256_info *sha, unsigned char* hash);
+void sha_final(sha_info *sha, unsigned char *hash, sha_type type);
+void append_length_to_padding(sha_info* sha);
+void little_endian_to_big(sha_info *sha, unsigned char* hash, sha_type);
 
 #endif

@@ -177,32 +177,32 @@ src/ft_md5.c.s:
 	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.s
 .PHONY : src/ft_md5.c.s
 
-src/ft_sha256.o: src/ft_sha256.c.o
+src/ft_sha.o: src/ft_sha.c.o
 
-.PHONY : src/ft_sha256.o
+.PHONY : src/ft_sha.o
 
 # target to build an object file
-src/ft_sha256.c.o:
-	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o
-.PHONY : src/ft_sha256.c.o
+src/ft_sha.c.o:
+	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o
+.PHONY : src/ft_sha.c.o
 
-src/ft_sha256.i: src/ft_sha256.c.i
+src/ft_sha.i: src/ft_sha.c.i
 
-.PHONY : src/ft_sha256.i
+.PHONY : src/ft_sha.i
 
 # target to preprocess a source file
-src/ft_sha256.c.i:
-	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.i
-.PHONY : src/ft_sha256.c.i
+src/ft_sha.c.i:
+	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.i
+.PHONY : src/ft_sha.c.i
 
-src/ft_sha256.s: src/ft_sha256.c.s
+src/ft_sha.s: src/ft_sha.c.s
 
-.PHONY : src/ft_sha256.s
+.PHONY : src/ft_sha.s
 
 # target to generate assembly for a file
-src/ft_sha256.c.s:
-	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.s
-.PHONY : src/ft_sha256.c.s
+src/ft_sha.c.s:
+	$(MAKE) -f CMakeFiles/ft_ssl_md5.dir/build.make CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.s
+.PHONY : src/ft_sha.c.s
 
 src/main.o: src/main.c.o
 
@@ -246,9 +246,9 @@ help:
 	@echo "... src/ft_md5.o"
 	@echo "... src/ft_md5.i"
 	@echo "... src/ft_md5.s"
-	@echo "... src/ft_sha256.o"
-	@echo "... src/ft_sha256.i"
-	@echo "... src/ft_sha256.s"
+	@echo "... src/ft_sha.o"
+	@echo "... src/ft_sha.i"
+	@echo "... src/ft_sha.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

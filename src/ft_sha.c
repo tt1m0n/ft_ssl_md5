@@ -1,4 +1,4 @@
-#include "ft_sha256.h"
+#include "ft_sha.h"
 
 void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS])
 {
@@ -12,7 +12,20 @@ void sha256_init_start_words(UINT (*info)[NUM_OF_START_WORDS])
 	(*info)[7] = 0x5be0cd19;
 }
 
-void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_t len)
+void sha224_init_start_words(UINT (*info)[NUM_OF_START_WORDS])
+{
+    (*info)[0] = 0xc1059ed8;
+    (*info)[1] = 0x367cd507;
+    (*info)[2] = 0x3070dd17;
+    (*info)[3] = 0xf70e5939;
+    (*info)[4] = 0xffc00b31;
+    (*info)[5] = 0x68581511;
+    (*info)[6] = 0x64f98fa7;
+    (*info)[7] = 0xbefa4fa4;
+}
+
+
+void sha_update_words(sha_info *sha_info, const unsigned char *data, size_t len)
 {
     UINT i;
 
@@ -23,7 +36,7 @@ void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_
         sha_info->datalen++;
         if(sha_info->datalen == MAX_SIZE_OF_WORD)
         {
-            sha256_transform_words(sha_info);
+            sha_transform_words(sha_info);
             sha_info->bitlen += MAX_SIZE_OF_WORD * SYMBOL_SIZE;
             sha_info->datalen = START_VALUE;
         }
@@ -31,13 +44,13 @@ void sha256_update_words(sha256_info* sha_info, const unsigned char* data, size_
     }
 }
 
-void sha256_transform_words(sha256_info* sha)
+void sha_transform_words(sha_info *sha)
 {
     UINT i;
     UINT tmp[NUM_OF_START_WORDS];
     UINT new_data[MAX_SIZE_OF_WORD];
 
-    sha256_data_transformation(sha, &new_data);
+    sha_data_transformation(sha, &new_data);
 
     i = START_VALUE;
     while(i < NUM_OF_START_WORDS)
@@ -46,7 +59,7 @@ void sha256_transform_words(sha256_info* sha)
         i++;
     }
 
-    sha256_compression_cycle(&tmp, &new_data);
+    sha_compression_cycle(&tmp, &new_data);
 
     i = START_VALUE;
     while (i < NUM_OF_START_WORDS)
@@ -56,7 +69,7 @@ void sha256_transform_words(sha256_info* sha)
     }
 }
 
-void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD])
+void sha_data_transformation(sha_info *sha, UINT (*new_data)[MAX_SIZE_OF_WORD])
 {
 	UCHAR* data;
 	UINT i;
@@ -83,8 +96,8 @@ void sha256_data_transformation(sha256_info *sha, UINT (*new_data)[MAX_SIZE_OF_W
 	}
 }
 
-void sha256_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
-        UINT (*new_data)[MAX_SIZE_OF_WORD])
+void sha_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
+                           UINT (*new_data)[MAX_SIZE_OF_WORD])
 {
     UINT i;
     UINT helpers1;
@@ -109,7 +122,7 @@ void sha256_compression_cycle(UINT (*tmp)[NUM_OF_START_WORDS],
     }
 }
 
-void sha256_final(sha256_info *sha, unsigned char* hash)
+void sha_final(sha_info *sha, unsigned char *hash, sha_type type)
 {
     UINT i;
 
@@ -125,15 +138,15 @@ void sha256_final(sha256_info *sha, unsigned char* hash)
         sha->data[i++] = START_PADDING;
         while (i < MAX_SIZE_OF_WORD)
             sha->data[i++] = ZERO_BIT;
-        sha256_transform_words(sha);
+        sha_transform_words(sha);
         ft_memset(sha->data, ZERO_BIT, MESSAGE_BYTE_SIZE);
     }
     append_length_to_padding(sha);
-    sha256_transform_words(sha);
-    little_endian_to_big(sha, hash);
+    sha_transform_words(sha);
+    little_endian_to_big(sha, hash, type);
 }
 
-void append_length_to_padding(sha256_info* sha)
+void append_length_to_padding(sha_info* sha)
 {
     sha->bitlen += sha->datalen * SYMBOL_SIZE;
     sha->data[63] = (UCHAR)sha->bitlen;
@@ -147,7 +160,7 @@ void append_length_to_padding(sha256_info* sha)
 }
 
 
-void little_endian_to_big(sha256_info *sha, unsigned char* hash)
+void little_endian_to_big(sha_info *sha, unsigned char* hash, sha_type type)
 {
     UINT i;
 
@@ -167,7 +180,8 @@ void little_endian_to_big(sha256_info *sha, unsigned char* hash)
                             (MAX_SHIFT - i * SYMBOL_SIZE));
         hash[i + INT_STEP * 6] = (UCHAR)(sha->start_word[6] >>
                             (MAX_SHIFT - i * SYMBOL_SIZE));
-        hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >>
+        if (type == sha_256)
+            hash[i + INT_STEP * 7] = (UCHAR)(sha->start_word[7] >>
                             (MAX_SHIFT - i * SYMBOL_SIZE));
         i++;
     }

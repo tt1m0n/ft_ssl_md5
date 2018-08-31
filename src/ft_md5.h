@@ -15,15 +15,6 @@
 
 #include "ft_global.h"
 
-#define MD5_OUTPUT_SIZE 16
-
-/*
- * The basic MD5 functions.
- *
- * F and G are optimized compared to their RFC 1321 definitions for
- * architectures that lack an AND-NOT instruction, just like in Colin Plumb's
- * implementation.
- */
 #define F(x, y, z) ((z) ^ ((x) & ((y) ^ (z))))
 #define G(x, y, z) ((y) ^ ((z) & ((x) ^ (y))))
 #define H(x, y, z) (((x) ^ (y)) ^ (z))
@@ -44,8 +35,15 @@
 	((UINT)ptr[(n) * 4 + 1] << 8) | \
 	((UINT)ptr[(n) * 4 + 2] << 16) | \
 	((UINT)ptr[(n) * 4 + 3] << 24))
+
 #define GET(n) \
 	(ctx->block[(n)])
+
+#define OUT(dst, src) \
+	(dst)[0] = (unsigned char)(src); \
+	(dst)[1] = (unsigned char)((src) >> 8); \
+	(dst)[2] = (unsigned char)((src) >> 16); \
+	(dst)[3] = (unsigned char)((src) >> 24);
 
 typedef struct {
     UINT lo, hi;

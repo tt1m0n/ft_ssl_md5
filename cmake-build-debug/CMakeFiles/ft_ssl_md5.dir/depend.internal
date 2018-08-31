@@ -9,14 +9,14 @@ CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.o
  /Users/omakovsk/ft_ssl_md5/src/ft_global.h
  /Users/omakovsk/ft_ssl_md5/src/ft_md5.c
  /Users/omakovsk/ft_ssl_md5/src/ft_md5.h
-CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o
+CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o
  /Users/omakovsk/ft_ssl_md5/libft/libft.h
  /Users/omakovsk/ft_ssl_md5/src/ft_global.h
- /Users/omakovsk/ft_ssl_md5/src/ft_sha256.c
- /Users/omakovsk/ft_ssl_md5/src/ft_sha256.h
+ /Users/omakovsk/ft_ssl_md5/src/ft_sha.c
+ /Users/omakovsk/ft_ssl_md5/src/ft_sha.h
 CMakeFiles/ft_ssl_md5.dir/src/main.c.o
  /Users/omakovsk/ft_ssl_md5/libft/libft.h
  /Users/omakovsk/ft_ssl_md5/src/ft_global.h
  /Users/omakovsk/ft_ssl_md5/src/ft_md5.h
- /Users/omakovsk/ft_ssl_md5/src/ft_sha256.h
+ /Users/omakovsk/ft_ssl_md5/src/ft_sha.h
  /Users/omakovsk/ft_ssl_md5/src/main.c

@@ -57,18 +57,18 @@ include CMakeFiles/ft_ssl_md5.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ft_ssl_md5.dir/flags.make
 
-CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o: CMakeFiles/ft_ssl_md5.dir/flags.make
-CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o: ../src/ft_sha256.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/omakovsk/ft_ssl_md5/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o   -c /Users/omakovsk/ft_ssl_md5/src/ft_sha256.c
+CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o: CMakeFiles/ft_ssl_md5.dir/flags.make
+CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o: ../src/ft_sha.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/omakovsk/ft_ssl_md5/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o   -c /Users/omakovsk/ft_ssl_md5/src/ft_sha.c
 
-CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/omakovsk/ft_ssl_md5/src/ft_sha256.c > CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.i
+CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/omakovsk/ft_ssl_md5/src/ft_sha.c > CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.i
 
-CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/omakovsk/ft_ssl_md5/src/ft_sha256.c -o CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.s
+CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/omakovsk/ft_ssl_md5/src/ft_sha.c -o CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.s
 
 CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.o: CMakeFiles/ft_ssl_md5.dir/flags.make
 CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.o: ../src/ft_md5.c
@@ -111,7 +111,7 @@ CMakeFiles/ft_ssl_md5.dir/src/ft_global.c.s: cmake_force
 
 # Object files for target ft_ssl_md5
 ft_ssl_md5_OBJECTS = \
-"CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o" \
+"CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o" \
 "CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.o" \
 "CMakeFiles/ft_ssl_md5.dir/src/main.c.o" \
 "CMakeFiles/ft_ssl_md5.dir/src/ft_global.c.o"
@@ -119,7 +119,7 @@ ft_ssl_md5_OBJECTS = \
 # External object files for target ft_ssl_md5
 ft_ssl_md5_EXTERNAL_OBJECTS =
 
-ft_ssl_md5: CMakeFiles/ft_ssl_md5.dir/src/ft_sha256.c.o
+ft_ssl_md5: CMakeFiles/ft_ssl_md5.dir/src/ft_sha.c.o
 ft_ssl_md5: CMakeFiles/ft_ssl_md5.dir/src/ft_md5.c.o
 ft_ssl_md5: CMakeFiles/ft_ssl_md5.dir/src/main.c.o
 ft_ssl_md5: CMakeFiles/ft_ssl_md5.dir/src/ft_global.c.o

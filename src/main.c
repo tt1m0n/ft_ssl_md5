@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_md5.h"
-#include "ft_sha256.h"
+#include "ft_sha.h"
 #include "ft_global.h"
 
 void common_hash_parse(int* flags, char* need_hash, char* filename)
@@ -25,16 +25,36 @@ void common_hash_parse(int* flags, char* need_hash, char* filename)
         *flags &= (Q | R);
 }
 
+void sha224(char* need_hash, int* flags, char* filename)
+{
+    UCHAR buf[SHA224_OUTPUT_SIZE];
+    sha_info sha = {};
+    UINT i;
+
+    i = START_VALUE;
+    sha224_init_start_words(&sha.start_word);
+    sha_update_words(&sha, (UCHAR *) need_hash, ft_strlen(need_hash));
+    sha_final(&sha, buf, sha_224);
+
+    if(*flags == 0 && filename[0] != 0)
+        ft_printf("SHA224 (%s) = ", filename);
+    if(*flags == S)
+        ft_printf("SHA224 (\"%s\") = ", need_hash);
+    while(i < SHA224_OUTPUT_SIZE)
+        ft_printf("%02x", buf[i++]);
+    common_hash_parse(flags, need_hash, filename);
+}
+
 void sha256(char* need_hash, int* flags, char* filename)
 {
     UCHAR buf[SHA256_OUTPUT_SIZE];
-    sha256_info sha = {};
+    sha_info sha = {};
     UINT i;
 
     i = START_VALUE;
     sha256_init_start_words(&sha.start_word);
-    sha256_update_words(&sha, (UCHAR*)need_hash, ft_strlen(need_hash));
-    sha256_final(&sha, buf);
+    sha_update_words(&sha, (UCHAR *) need_hash, ft_strlen(need_hash));
+    sha_final(&sha, buf, sha_256);
 
     if(*flags == 0 && filename[0] != 0)
         ft_printf("SHA256 (%s) = ", filename);
@@ -70,6 +90,8 @@ hash_ptr find_hash_type(char* hash)
 {
     if(ft_strcmp("md5", hash) == 0)
         return md5;
+    if(ft_strcmp("sha224", hash) == 0)
+        return sha224;
     if(ft_strcmp("sha256", hash) == 0)
         return sha256;
     return (0);
@@ -80,6 +102,8 @@ int printf_no_flag_error(hash_ptr hash_type)
     ft_printf ("usage: ");
     if(hash_type == md5)
         ft_printf("md5 ");
+    if(hash_type == sha224)
+        ft_printf("sha224 ");
     if(hash_type == sha256)
         ft_printf("sha256 ");
     ft_printf("[-pqrtx] [-s string] [files ...]\n");
@@ -92,6 +116,8 @@ int print_error(hash_ptr hash_type, error_type error_type, char* filename)
         return (printf_no_flag_error(hash_type));
     if(hash_type == md5)
         ft_printf("md5: ");
+    if(hash_type == sha224)
+        ft_printf("sha224: ");
     if(hash_type == sha256)
         ft_printf("sha256: ");
     if(error_type == no_file)
@@ -101,6 +127,7 @@ int print_error(hash_ptr hash_type, error_type error_type, char* filename)
     if(error_type == error_command)
         ft_printf("Message Digest commands:\n"
                   "md5\n"
+                  "sha224\n"
                   "sha256\n");
     return (1);
 }
