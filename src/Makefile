@@ -6,13 +6,14 @@
 #    By: omakovsk <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/12 12:20:55 by omakovsk          #+#    #+#              #
-#    Updated: 2018/08/25 19:53:55 by omakovsk         ###   ########.fr        #
+#    Updated: 2018/09/01 18:24:18 by omakovsk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FLAGS = -Wall -Werror -Wextra -c
 
-SRC = main.c ft_sha.c ft_md5.c ft_global.c
+SRC = main.c ft_sha.c ft_md5.c ft_global.c ft_sha_384_512.c init_start_words.c \
+	  ft_main_hash_function.c ft_parse_and_read.c ft_sha_helpers.c
 
 OBJ	= $(SRC:.c=.o)
 

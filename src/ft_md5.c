@@ -1,18 +1,7 @@
 # include "../libft/libft.h"
 #include "ft_md5.h"
 
-void MD5_Init(MD5_CTX *ctx)
-{
-    ctx->a = 0x67452301;
-    ctx->b = 0xefcdab89;
-    ctx->c = 0x98badcfe;
-    ctx->d = 0x10325476;
-
-    ctx->lo = 0;
-    ctx->hi = 0;
-}
-
-void md5_round1(UINT (*tmp)[4], MD5_CTX *ctx, const UCHAR* ptr)
+void md5_round1(t_uint (*tmp)[4], t_md5_info *ctx, const t_uchar* ptr)
 {
     STEP(F, (*tmp)[0], (*tmp)[1], (*tmp)[2], (*tmp)[3], SET(0), 0xd76aa478, 7)
     STEP(F, (*tmp)[3], (*tmp)[0], (*tmp)[1], (*tmp)[2], SET(1), 0xe8c7b756, 12)
@@ -32,7 +21,7 @@ void md5_round1(UINT (*tmp)[4], MD5_CTX *ctx, const UCHAR* ptr)
     STEP(F, (*tmp)[1], (*tmp)[2], (*tmp)[3], (*tmp)[0], SET(15), 0x49b40821, 22)
 }
 
-void md5_round2(UINT (*tmp)[4], MD5_CTX *ctx)
+void md5_round2(t_uint (*tmp)[4], t_md5_info *ctx)
 {
     STEP(G, (*tmp)[0], (*tmp)[1], (*tmp)[2], (*tmp)[3], GET(1), 0xf61e2562, 5)
     STEP(G, (*tmp)[3], (*tmp)[0], (*tmp)[1], (*tmp)[2], GET(6), 0xc040b340, 9)
@@ -52,7 +41,7 @@ void md5_round2(UINT (*tmp)[4], MD5_CTX *ctx)
     STEP(G, (*tmp)[1], (*tmp)[2], (*tmp)[3], (*tmp)[0], GET(12), 0x8d2a4c8a, 20)
 }
 
-void md5_round3(UINT (*tmp)[4], MD5_CTX *ctx)
+void md5_round3(t_uint (*tmp)[4], t_md5_info *ctx)
 {
     STEP(H, (*tmp)[0], (*tmp)[1], (*tmp)[2], (*tmp)[3], GET(5), 0xfffa3942, 4)
     STEP(H2, (*tmp)[3], (*tmp)[0], (*tmp)[1], (*tmp)[2], GET(8), 0x8771f681, 11)
@@ -72,7 +61,7 @@ void md5_round3(UINT (*tmp)[4], MD5_CTX *ctx)
     STEP(H2, (*tmp)[1], (*tmp)[2], (*tmp)[3], (*tmp)[0], GET(2), 0xc4ac5665, 23)
 }
 
-void md5_round4(UINT (*tmp)[4], MD5_CTX *ctx)
+void md5_round4(t_uint (*tmp)[4], t_md5_info *ctx)
 {
     STEP(I, (*tmp)[0], (*tmp)[1], (*tmp)[2], (*tmp)[3], GET(0), 0xf4292244, 6)
     STEP(I, (*tmp)[3], (*tmp)[0], (*tmp)[1], (*tmp)[2], GET(7), 0x432aff97, 10)
@@ -92,9 +81,9 @@ void md5_round4(UINT (*tmp)[4], MD5_CTX *ctx)
     STEP(I, (*tmp)[1], (*tmp)[2], (*tmp)[3], (*tmp)[0], GET(9), 0xeb86d391, 21)
 }
 
-void md5_body_cycle(UINT (*tmp)[4], MD5_CTX *ctx, const UCHAR* ptr)
+void md5_body_cycle(t_uint (*tmp)[4], t_md5_info *ctx, const t_uchar* ptr)
 {
-    UINT saved_tmp[4];
+    t_uint saved_tmp[4];
 
     saved_tmp[0] = (*tmp)[0];
     saved_tmp[1] = (*tmp)[1];
@@ -110,12 +99,12 @@ void md5_body_cycle(UINT (*tmp)[4], MD5_CTX *ctx, const UCHAR* ptr)
     (*tmp)[3] += saved_tmp[3];
 }
 
-static const void *body(MD5_CTX *ctx, const void *data, unsigned long size)
+static const void *body(t_md5_info *ctx, const void *data, unsigned long size)
 {
-    const UCHAR *ptr;
-    UINT tmp[4];
+    const t_uchar *ptr;
+    t_uint tmp[4];
 
-    ptr = (const UCHAR*)data;
+    ptr = (const t_uchar*)data;
     tmp[0] = ctx->a;
     tmp[1] = ctx->b;
     tmp[2] = ctx->c;
@@ -134,38 +123,38 @@ static const void *body(MD5_CTX *ctx, const void *data, unsigned long size)
     return ptr;
 }
 
-void MD5_Update(MD5_CTX *ctx, const void *data, unsigned long size)
+void md5_update_words(t_md5_info *md5, const void *data, unsigned long size)
 {
-    UINT  saved_lo;
-    ULONG used, available;
+    t_uint  saved_lo;
+    t_ulong used, available;
 
-    saved_lo = ctx->lo;
-    if ((ctx->lo = (saved_lo + size) & 0x1fffffff) < saved_lo)
-        ctx->hi++;
-    ctx->hi += size >> 29;
+    saved_lo = md5->lo;
+    if ((md5->lo = (saved_lo + size) & 0x1fffffff) < saved_lo)
+        md5->hi++;
+    md5->hi += size >> 29;
     used = saved_lo & 0x3f;
     if (used)
     {
         available = 64 - used;
         if (size < available)
         {
-            memcpy(&ctx->buffer[used], data, size);
+            memcpy(&md5->buffer[used], data, size);
             return;
         }
-        memcpy(&ctx->buffer[used], data, available);
-        data = (const UCHAR*)data + available;
+        memcpy(&md5->buffer[used], data, available);
+        data = (const t_uchar*)data + available;
         size -= available;
-        body(ctx, ctx->buffer, 64);
+        body(md5, md5->buffer, 64);
     }
     if (size >= 64)
     {
-        data = body(ctx, data, size & ~(ULONG)0x3f);
+        data = body(md5, data, size & ~(t_ulong)0x3f);
         size &= 0x3f;
     }
-    memcpy(ctx->buffer, data, size);
+    memcpy(md5->buffer, data, size);
 }
 
-void MD5_Final(unsigned char *result, MD5_CTX *ctx)
+void md5_final(unsigned char *result, t_md5_info *ctx)
 {
     unsigned long used, available;
 

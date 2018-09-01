@@ -10,52 +10,66 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_SSL_MD5_GLOBAL_H
-#define FT_SSL_MD5_GLOBAL_H
+#ifndef FT_GLOBAL_H
+# define FT_GLOBAL_H
 
-#include <fcntl.h>
+# include "../libft/libft.h"
+# include <fcntl.h>
 
-#define MD5_OUTPUT_SIZE 16
-#define SHA224_OUTPUT_SIZE 28
-#define SHA256_OUTPUT_SIZE 32
+# define MD5_OUTPUT_SIZE 16
+# define SHA224_OUTPUT_SIZE 28
+# define SHA256_OUTPUT_SIZE 32
+# define SHA384_OUTPUT_SIZE 48
+# define SHA512_OUTPUT_SIZE 64
 
-#define USAGE_STRING "usage: ft_ssl command [command opts] [command args]\n"
-#define STDIN ""
-#define BUFFER_SIZE 512
-#define UNKNOWN_FLAG 2
-#define START_VALUE  0
+# define USAGE_STRING "usage: ft_ssl command [command opts] [command args]\n"
+# define STDIN ""
+# define BUFFER_SIZE 512
+# define UNKNOWN_FLAG 2
+# define START_VALUE  0
 
-typedef unsigned int UINT;
-typedef unsigned char UCHAR;
-typedef unsigned long ULONG;
+typedef unsigned int	t_uint;
+typedef unsigned char	t_uchar;
+typedef unsigned long	t_ulong;
 
-#define Q 1
-#define R 2
-#define S 4
-#define P 8
+# define Q	1
+# define R	2
+# define S	4
+# define P	8
 
-typedef enum
+typedef enum	e_error_type
 {
-    no_file = 0,
-    no_flag,
-    error_command,
-    try_open_dir
-} error_type;
+	no_file = 0,
+	no_flag,
+	error_command,
+	try_open_dir
+}				t_error_type;
 
-typedef enum
+typedef enum	e_sha_type
 {
-    sha_224 = 0,
-    sha_256
-} sha_type;
+	sha_224 = 0,
+	sha_256,
+	sha_384,
+	sha_512
+}				t_sha_type;
 
-typedef void (*hash_ptr)(char*, int* flags, char* filename);
+typedef void	(*t_hash_ptr)(char*, int* flags, char* filename);
 
-typedef struct
+typedef struct	s_hash_info
 {
-    hash_ptr    hash_ptr;
-    int         flags;
-} hash_info;
+	t_hash_ptr	hashptr;
+	int			flags;
+}				t_hash_info;
 
-extern const UINT sha256_word[64];
+void			md5(char *need_hash, int *flags, char *filename);
+void			sha224(char *need_hash, int *flags, char *filename);
+void			sha256(char *need_hash, int *flags, char *filename);
+void			sha384(char *need_hash, int *flags, char *filename);
+void			sha512(char *need_hash, int *flags, char *filename);
 
-#endif //FT_SSL_MD5_GLOBAL_H
+extern const t_uint		g_sha_word[64];
+extern const t_ulong	g_sha1_word[80];
+extern char				*g_hash_name[6];
+extern const t_hash_ptr g_hash_function[6];
+
+#endif
